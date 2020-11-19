@@ -1,7 +1,7 @@
 clear, close all
 
 % Read RGB Image
-img = imread ('legumes.png');
+img = imread('legumes.png');
 [width, height, channels] = size(img);
 
 % Convert to Gray Scale

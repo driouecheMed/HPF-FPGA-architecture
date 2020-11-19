@@ -3,19 +3,13 @@ clear, close all
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Read RGB Image
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-img = imread ('test.jpg');
-% img = imread('RGB.png');
-
+img = imread('RGB.png');
 [width, height, channels] = size(img);
 img = double(img);
-%imshow(img)
-%title('ORIGINAL IMAGE');
-%figure;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Add padding with zeros for each layer (R, G, B)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 p_img_R = double(zeros([width + 2, height + 2]));
 p_img_R(2 : width+1, 2 : height+1) = double(img(:,:,1));
 
@@ -64,7 +58,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 HPF_result_img = cat(channels, HPF_Red, HPF_Green, HPF_Blue);
 % size(HPF_result_img)
-
 sharped_result_img = cat(channels, sharped_Red, sharped_Green, sharped_Blue);
 % size(HPF_result_img)
 
@@ -92,4 +85,3 @@ title('HPF RGB Result');
 subplot(3,3,9);
 imshow(sharped_result_img);
 title('Sharped RGB Image');
-
