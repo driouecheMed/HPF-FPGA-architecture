@@ -58,4 +58,22 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 output_img = cat(channels, R, G, B);
 % size(output_img)
-imshow(output_img)
+subplot(3,3,2);
+imshow(img);
+title('HPF RGB Result');
+
+subplot(3,3,4);
+imshow(R);
+title('HPF Red Layer Result');
+
+subplot(3,3,5);
+imshow(G);
+title('HPF Green Layer Result');
+
+subplot(3,3,6);
+imshow(B);
+title('HPF Bleu Layer Result');
+
+subplot(3,3,7);
+imshow(output_img);
+title('HPF RGB Result');
