@@ -1,35 +1,61 @@
 clear, close all
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Read RGB Image
-img = imread ('football.jpg');
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% img = imread ('vegetables.jpg');
+img = imread('RGB.png');
+
 [width, height, channels] = size(img);
+img = double(img);
 %imshow(img)
 %title('ORIGINAL IMAGE');
 %figure;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Add padding with zeros for each layer (R, G, B)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+p_img_R = double(zeros([width + 2, height + 2]));
+p_img_R(2 : width+1, 2 : height+1) = double(img(:,:,1));
+
+p_img_G = double(zeros([width + 2, height + 2]));
+p_img_G(2 : width+1, 2 : height+1) = double(img(:,:,2));
+
+p_img_B = double(zeros([width + 2, height + 2]));
+p_img_B(2 : width+1, 2 : height+1) = double(img(:,:,3));
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Compute Laplacian Conv
-% kernel = [0 1 0; 1 -4 1; 0 1 0];
+% kernel = [-1 -1 -1; -1 8 -1; -1 -1 -1];
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Red Channel
-for i = 1 : (width - 2)
-    for j = 1 : (height - 2)
-            R(i, j) = img(i, j+1, 1) + img(i+1, j, 1) - 4*img(i+1, j+1, 1) + img(i+1, j+2, 1) + img(i+2, j+1, 1);
+R = uint8(zeros([width, height]));
+for i = 2 : (width + 1)
+    for j = 2 : (height + 1)
+        R(i-1, j-1) = -p_img_R(i-1, j-1) - p_img_R(i-1, j) - p_img_R(i-1, j+1) - p_img_R(i, j-1) + (8 * p_img_R(i, j)) - p_img_R(i, j+1) - p_img_R(i+1, j-1) - p_img_R(i+1, j) - p_img_R(i+1, j+1);
     end
 end
 
 % Green Channel
-for i = 1 : (width - 2)
-    for j = 1 : (height - 2)
-            G(i, j) = img(i, j+1, 2) + img(i+1, j, 2) - 4*img(i+1, j+1, 2) + img(i+1, j+2, 2) + img(i+2, j+1, 2);
+G = uint8(zeros([width, height]));
+for i = 2 : (width + 1)
+    for j = 2 : (height + 1)
+        G(i-1, j-1) = -p_img_G(i-1, j-1) - p_img_G(i-1, j) - p_img_G(i-1, j+1) - p_img_G(i, j-1) + (8 * p_img_G(i, j)) - p_img_G(i, j+1) - p_img_G(i+1, j-1) - p_img_G(i+1, j) - p_img_G(i+1, j+1);
      end
 end
 
 % Bleu Channel
-for i = 1 : (width - 2)
-    for j = 1 : (height - 2)
-            B(i, j) = img(i, j+1, 3) + img(i+1, j, 3) - 4*img(i+1, j+1, 3) + img(i+1, j+2, 3) + img(i+2, j+1, 3);
-     end
+B = uint8(zeros([width, height]));
+for i = 2 : (width + 1)
+    for j = 2 : (height + 1)
+        B(i-1, j-1) = -p_img_B(i-1, j-1) - p_img_B(i-1, j) - p_img_B(i-1, j+1) - p_img_B(i, j-1) + (8 * p_img_B(i, j)) - p_img_B(i, j+1) - p_img_B(i+1, j-1) - p_img_B(i+1, j) - p_img_B(i+1, j+1);
+    end
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Displaying
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 output_img = cat(channels, R, G, B);
 % size(output_img)
 imshow(output_img)
